@@ -5,5 +5,5 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const app = express();
 
-const{BlogPosts} = require('./models');
+const{blogPost} = require('./models');
 
