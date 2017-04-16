@@ -13,8 +13,8 @@ app.get('/blogPosts', (req, res) => {
   blogPost
     .find()
     .exec()
-    .then(blogPost => {
-      res.json(blogPost.map(blogPost => blogPost.apiRepr()));
+    .then(blogPosts => {
+      res.json(blogPosts.map(blogPost => blogPost.apiRepr()));
     })
     .catch(err => {
       console.error(err);
@@ -34,7 +34,7 @@ app.get('/blogPosts/:id', (req, res) => {
 });
 
 app.post('/blogPosts', (req, res) => {
-  const requiredFields = ['title', 'content', 'author.firstName', 'author.lastName'];
+  const requiredFields = ['title', 'content', 'author'];
   for (let i=0; i<requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -50,8 +50,7 @@ app.post('/blogPosts', (req, res) => {
       content: req.body.content,
       author : req.body.author
       })
-    .then(
-      blogPost => res.status(201).json(blogPost.apiRepr()))
+    .then(blogPost => res.status(201).json(blogPost.apiRepr()))
     .catch(err => {
       console.error(err);
       res.status(500).json({message: 'Internal server error'});
