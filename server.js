@@ -1,9 +1,10 @@
 const express = require('express');
-const morgan = require('morgan');
-const router = express.Router();
 const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json();
+const mongoose = require('mongoose');
+
+mongoose.Promise = global.Promise;
+
+const {PORT, DATABASE_URL} = require('./config');
+const {blogPost} = require('./models');
 const app = express();
-
-const{blogPost} = require('./models');
-
+app.use(bodyParser.json());
