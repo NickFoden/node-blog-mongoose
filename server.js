@@ -9,11 +9,24 @@ const {blogPost} = require('./models');
 const app = express();
 app.use(bodyParser.json());
 
+app.get('/blogPosts', (req, res) => {
+  blogPost
+    .find()
+    .exec()
+    .then(blogPost => {
+      res.json(blogPost.map(blogPost => blogPost.apiRepr()));
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({error: 'Your get request isn"t working' });
+    });
+});
+
 app.get('/blogPosts/:id', (req, res) => {
   blogPost
     .findById(req.params.id)
     .exec()
-    .then(blogPost =>res.status(201).json(blogPost.apiRepr()))
+    .then(blogPost =>res.json(blogPost.apiRepr()))
     .catch(err => {
       console.error(err);
         res.status(500).json({message: 'Internal server error'})
@@ -35,9 +48,7 @@ app.post('/blogPosts', (req, res) => {
     .create({
       title: req.body.title,
       content: req.body.content,
-      author : {
-      	firstName : req.body.firstName,
-      	lastName : req.body.lastName}
+      author : req.body.author
       })
     .then(
       blogPost => res.status(201).json(blogPost.apiRepr()))
